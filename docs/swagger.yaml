@@ -1,0 +1,449 @@
+basePath: /
+definitions:
+  models.InputTaskCreate:
+    properties:
+      name:
+        type: string
+      start_time:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.InputTaskDelete:
+    properties:
+      task_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.InputTaskUpdate:
+    properties:
+      id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.OutputTask:
+    properties:
+      duration:
+        type: string
+      name:
+        type: string
+    type: object
+  models.UpdateUserInput:
+    properties:
+      addr:
+        type: string
+      passport_number:
+        type: string
+    type: object
+  models.User:
+    properties:
+      addr:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      passport_number:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for TimeTracker Application
+  title: Time Tracker API
+  version: "1.0"
+paths:
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: 'Get tasks for a user within a specified period. EXAMPLE: 2024-07-15T13:35:35.481207+03:00'
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Start Time
+        format: date-time
+        in: query
+        name: start_time
+        type: string
+      - description: End Time
+        format: date-time
+        in: query
+        name: end_time
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"tasks": [...]}'
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.OutputTask'
+              type: array
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: GetTasks
+      tags:
+      - Task
+  /tasks/:
+    post:
+      consumes:
+      - application/json
+      description: 'Create task. Example start_time: 2024-07-15T13:35:35.481207+03:00'
+      parameters:
+      - description: task info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputTaskCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: CreateTask
+      tags:
+      - Task
+  /tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing task
+      parameters:
+      - description: task delete info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputTaskDelete'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: '{"error": "Not Found"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: DeleteTask
+      tags:
+      - Task
+    put:
+      consumes:
+      - application/json
+      description: Update an existing task
+      parameters:
+      - description: task update info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputTaskUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"task id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "208":
+          description: '{"error": "Task Already Ended"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: '{"error": "Not Found"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: UpdateTask
+      tags:
+      - Task
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Returns users according to filters and pagination
+      parameters:
+      - description: user id
+        in: query
+        name: ID
+        type: string
+      - description: username
+        in: query
+        name: Name
+        type: string
+      - description: Surname
+        in: query
+        name: Surname
+        type: string
+      - description: Patronymic
+        in: query
+        name: Patronymic
+        type: string
+      - description: PassportNumber
+        in: query
+        name: PassportNumber
+        type: string
+      - description: Address
+        in: query
+        name: Address
+        type: string
+      - description: Limit
+        in: query
+        name: Limit
+        type: integer
+      - description: Offset
+        in: query
+        name: Offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: '{"error": "Not Found"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: GetUsers
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User info
+        in: query
+        name: PassportNumber
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: CreateUser
+      tags:
+      - User
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: DeleteUser
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Returns a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: '{"error": "Not Found"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: GetUserByID
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update an existing user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User update info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: UpdateUser
+      tags:
+      - User
+swagger: "2.0"

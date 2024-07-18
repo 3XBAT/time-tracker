@@ -1,0 +1,15 @@
+port: ":8080"
+
+env: "local" # dev, prod
+
+db:
+  port: "5432"
+  host: "localhost"
+  dbname: "timeDB"
+  sslmode: "disable"
+  username: "postgres"
+  password: "qwerty"
+
+api:
+  api_url: "http://external-api"
+

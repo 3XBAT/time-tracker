@@ -1,0 +1,220 @@
+basePath: /
+definitions:
+  models.DeleteTaskRequest:
+    properties:
+      task_id:
+        type: integer
+    type: object
+  models.InputTask:
+    properties:
+      end_time:
+        type: string
+      start_time:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.InputTaskUpdate:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.OutputTask:
+    properties:
+      duration:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Task:
+    properties:
+      end_time:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      start_time:
+        type: string
+      user_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for TimeTracker Application
+  title: Time Tracker API
+  version: "1.0"
+paths:
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: Get tasks for a user within a specified period
+      parameters:
+      - description: task query info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"tasks": [...]}'
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.OutputTask'
+              type: array
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: GetTasks
+      tags:
+      - Task
+  /tasks/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing task
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: task deletion info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.DeleteTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: '{"error": "Not Found"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: DeleteTask
+      tags:
+      - Task
+    post:
+      consumes:
+      - application/json
+      description: Create task
+      parameters:
+      - description: task info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: CreateTask
+      tags:
+      - Task
+    put:
+      consumes:
+      - application/json
+      description: Update an existing task
+      parameters:
+      - description: task update info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputTaskUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"task id": 1}'
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "208":
+          description: '{"error": "Task Already Ended"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: '{"error": "Bad Request"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: '{"error": "Not Found"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: '{"error": "Internal Server Error"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: UpdateTask
+      tags:
+      - Task
+swagger: "2.0"
