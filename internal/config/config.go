@@ -9,7 +9,7 @@ import (
 
 type Config struct {
 	Env  string    `yaml:"env" env-default:"local"`
-	Port string    `yaml:"port" envDefault:"8080"`
+	Port string    `yaml:"port" envDefault:":8080"`
 	DB   DBConfig  `yaml:"db"`
 	API  APIConfig `yaml:"api"`
 }

@@ -14,3 +14,4 @@ CREATE TABLE tasks (
     end_time TIMESTAMP WITH TIME ZONE,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+

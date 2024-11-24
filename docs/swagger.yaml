@@ -57,8 +57,25 @@ info:
   contact: {}
   description: API Server for TimeTracker Application
   title: Time Tracker API
-  version: "1.0"
+  version: "1.01"
 paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Check if the service is available
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status": "service is available"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health Check
+      tags:
+      - Service
   /tasks:
     get:
       consumes:

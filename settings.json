@@ -1,0 +1,7 @@
+{
+  "editor.tokenColorCustomizations": {
+    // ... существующие настройки ...
+  },
+  "workbench.colorTheme": "Darcula",
+  "editor.fontLigatures": false
+} 

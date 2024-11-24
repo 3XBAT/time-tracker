@@ -149,7 +149,7 @@ func (h *Handler) getTasks(c *gin.Context) {
 	input.UserID = userID
 
 	checkStartTime := c.Query("start_time")
-	fmt.Println(checkStartTime)
+
 	if checkStartTime != "" {
 		startTime, err := time.Parse(time.RFC3339, checkStartTime)
 		if err != nil {
@@ -174,9 +174,11 @@ func (h *Handler) getTasks(c *gin.Context) {
 	}
 
 	fmt.Println(userID, checkEndTime, checkStartTime)
+	
 	tasks, err := h.service.TaskProvider.Tasks(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, tasks)

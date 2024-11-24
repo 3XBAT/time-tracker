@@ -28,7 +28,7 @@ const (
 )
 
 // @title Time Tracker API
-// @version 1.0
+// @version 1.01
 // @description API Server for TimeTracker Application
 
 // @host localhost:8080

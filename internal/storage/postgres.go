@@ -8,7 +8,7 @@ import (
 )
 
 func NewPostgresDB(cfg config.Config) (*sqlx.DB, error) {
-	const op = "storage.storage.NewStorage"
+	const op = "storage.postgres.NewStorageDB"
 
 	db, err := sqlx.Open("postgres",
 		fmt.Sprintf("port=%s user=%s host=%s dbname=%s password=%s sslmode=%s",
@@ -19,7 +19,7 @@ func NewPostgresDB(cfg config.Config) (*sqlx.DB, error) {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	err = db.Ping() // тут возникает ошибка failed to connect to database
+	err = db.Ping()
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}

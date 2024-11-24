@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 )
 
 type Handler struct {
@@ -21,6 +22,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.BasePath = "/"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	router.GET("/health", h.healthCheck)
+
 	router.GET("/users", h.getUsers)
 	router.GET("/users/:id", h.getUserByID)
 	router.POST("/users", h.createUser)
@@ -32,4 +35,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.DELETE("/tasks/:id", h.deleteTask) //
 	router.GET("tasks/", h.getTasks)
 	return router
+}
+
+// @Summary Health Check
+// @Tags Service
+// @Description Check if the service is available
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]string "{"status": "service is available"}"
+// @Router /health [get]
+func (h *Handler) healthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK, map[string]string{
+		"status": "service is available",
+	})
 }

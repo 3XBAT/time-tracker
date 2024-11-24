@@ -4,10 +4,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/3XBAT/time-tracker/internal/domain/models"
-	"github.com/jmoiron/sqlx"
 	"strings"
 	"time"
+
+	"github.com/3XBAT/time-tracker/internal/domain/models"
+	"github.com/jmoiron/sqlx"
 )
 
 type TaskStorage struct {
@@ -150,10 +151,14 @@ func (s *TaskStorage) TaskById(taskID int) (models.Task, error) {
 }
 
 func formatDuration(d time.Duration) string {
-	hours := int(d.Hours())
+	days := int(d.Hours()) / 24
+	hours := int(d.Hours()) % 24
 	minutes := int(d.Minutes()) % 60
-	seconds := int(d.Seconds()) % 60
-	return fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+	
+	if days > 0 {
+		return fmt.Sprintf("%dd %02dh %02dm", days, hours, minutes)
+	}
+	return fmt.Sprintf("%02dh %02dm", hours, minutes)
 }
 
 func buildQueryForTasks(input models.InputTask) (string, []interface{}) {
